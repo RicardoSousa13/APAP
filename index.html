@@ -3,16 +3,46 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title>Alexandre Parente — Landscape Architecture</title>
     <meta
       name="description"
-      content="Architecture and research practice based in Porto, Portugal. Projects, archive, and studio information."
+      content="Alexandre Parente is an architect working with landscape and spatial research."
     />
-    <meta name="author" content="Ricardo Sousa" />
-    <link rel="icon" href="images/favicon.ico" type="image/x-icon" />
+    <meta name="author" content="Alexandre Parente" />
+    <meta name="theme-color" content="#ffffff" />
+    <title>Alexandre Parente — Landscape and Spatial Research</title>
     <link rel="stylesheet" href="style.css" />
+    <script src="main.js" defer></script>
   </head>
 
-  <body></body>
+  <body>
+    <header class="site-header" aria-label="Site header">
+      <a class="site-brand element-reveal" href="#project-07" aria-label="Alexandre Parente, home">
+        <img src="assets/graphics/Logo.svg" alt="Alexandre Parente" />
+      </a>
+
+      <nav class="site-navigation" aria-label="Main navigation">
+        <button class="text-link text-reveal" type="button" data-open-dialog="project-index">
+          Index
+        </button>
+        <a class="text-link text-reveal" href="info.html">
+          Info
+        </a>
+      </nav>
+    </header>
+
+    <main id="projects" class="project-index" aria-label="Selected projects">
+      <!-- Project panels are created from the project list in main.js. -->
+    </main>
+
+    <dialog class="site-dialog" id="project-index" aria-labelledby="index-title">
+      <div class="dialog-heading">
+        <h2 id="index-title">Index</h2>
+        <button class="dialog-close" type="button" aria-label="Close index" data-close-dialog>
+          Close
+        </button>
+      </div>
+      <ol class="index-list" id="index-list"></ol>
+    </dialog>
+
+  </body>
 </html>
