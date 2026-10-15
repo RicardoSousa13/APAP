@@ -1,24 +1,36 @@
 const projects = [
   {
     number: "07",
-    title: "Collage garden",
+    title: "Collage garden project",
     location: "Estoril, PT",
     slides: [
       {
         src: "assets/images/img_test.png",
         alt: "Garden with a stone path, mature trees, planting beds, and a timber pergola.",
+        credit: "img_test.png",
+      },
+      {
+        src: "assets/images/Janvier_LPT_Plan.jpg",
+        alt: "Landscape plan drawing.",
+        credit: "Janvier_LPT_Plan.jpg",
+      },
+      {
+        src: "assets/images/par_albufeira-20.jpg",
+        alt: "Garden and house in Albufeira.",
+        credit: "par_albufeira-20.jpg",
       },
     ],
   },
-  // Temporary content to preview the scroll transition. Replace with a real project later.
+  // Temporary panel to keep the scroll transition available while the project list is being prepared.
   {
     number: "08",
     title: "Next — preview",
     location: "Location, PT",
     slides: [
       {
-        src: "assets/images/img_test.png",
-        alt: "Temporary preview using the existing garden image.",
+        src: "assets/images/par_albufeira-20.jpg",
+        alt: "Garden and house in Albufeira.",
+        credit: "par_albufeira-20.jpg",
       },
     ],
   },
@@ -58,6 +70,15 @@ function createProject(project, projectPosition) {
   const visual = document.createElement("div");
   visual.className = "project-visual element-reveal";
   visual.style.setProperty("--reveal-delay", "280ms");
+  visual.addEventListener(
+    "animationend",
+    (event) => {
+      if (event.animationName === "element-reveal") {
+        visual.classList.remove("element-reveal");
+      }
+    },
+    { once: true },
+  );
   visual.setAttribute("role", "group");
   visual.setAttribute("aria-label", `${project.title} images`);
 
@@ -69,50 +90,57 @@ function createProject(project, projectPosition) {
     const image = document.createElement("img");
     image.src = slide.src;
     image.alt = slide.alt;
-    image.loading =
-      projectPosition === 0 && slidePosition === 0 ? "eager" : "lazy";
+    image.loading = projectPosition === 0 ? "eager" : "lazy";
     image.decoding = "async";
     figure.append(image);
     visual.append(figure);
     return figure;
   });
 
-  const controls = document.createElement("div");
-  controls.className = "slider-controls";
-  controls.hidden = slides.length < 2;
-  controls.setAttribute("aria-label", "Project image controls");
-
   let activeSlide = 0;
   const previous = document.createElement("button");
-  previous.className = "slider-control";
+  previous.className = "slider-zone slider-zone--previous";
   previous.type = "button";
-  previous.textContent = "Previous";
+  previous.hidden = slides.length < 2;
   previous.setAttribute("aria-label", "Previous image");
+  const previousLabel = document.createElement("span");
+  previousLabel.className = "visually-hidden";
+  previousLabel.textContent = "Previous image";
+  previous.append(previousLabel);
 
   const slideCount = document.createElement("span");
+  slideCount.className = "slide-counter";
   slideCount.setAttribute("aria-live", "polite");
 
   const next = document.createElement("button");
-  next.className = "slider-control";
+  next.className = "slider-zone slider-zone--next";
   next.type = "button";
-  next.textContent = "Next";
+  next.hidden = slides.length < 2;
   next.setAttribute("aria-label", "Next image");
+
+  const credit = document.createElement("span");
+  credit.className = "image-credit";
+
+  const footer = document.createElement("div");
+  footer.className = "project-footer text-reveal";
+  footer.style.setProperty("--reveal-delay", "360ms");
 
   function showSlide(newPosition) {
     activeSlide = (newPosition + slides.length) % slides.length;
     slides.forEach((slide, slidePosition) => {
       slide.classList.toggle("is-active", slidePosition === activeSlide);
     });
-    slideCount.textContent = `${String(activeSlide + 1).padStart(2, "0")} / ${String(slides.length).padStart(2, "0")}`;
+    slideCount.textContent = `${String(activeSlide + 1).padStart(2, "0")}/${String(slides.length).padStart(2, "0")}`;
+    credit.textContent = project.slides[activeSlide].credit;
   }
 
   previous.addEventListener("click", () => showSlide(activeSlide - 1));
   next.addEventListener("click", () => showSlide(activeSlide + 1));
   showSlide(0);
-  controls.append(previous, slideCount, next);
-  visual.append(controls);
+  visual.append(previous, next);
+  footer.append(slideCount, credit);
 
-  panel.append(caption, visual);
+  panel.append(caption, visual, footer);
 
   const indexItem = document.createElement("li");
   const indexLink = document.createElement("a");
